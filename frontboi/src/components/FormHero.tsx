@@ -6,9 +6,20 @@ enum Direction {
     R = "R"
 }
 
-const SliderButtonContainer = styled.div`
+const FormContainer = styled.div`
     display: flex;
     direction: row;
+`
+
+const AddressSelectorContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`
+
+const InputContainer = styled.div`
+    display: flex;
+    align-items: center;
+    height: calc(14px + 25vmin);
 `
 
 const SliderButton = styled.button`
@@ -16,6 +27,7 @@ const SliderButton = styled.button`
     border: none;
     font-weight: bold;
     color: white;
+    padding: calc(4px + 5vmin)
 `
 
 const FormInput = styled.input`
@@ -38,11 +50,6 @@ const FormSelect = styled.select`
     margin: 4px;
 `
 
-const AddressSelectorContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-`
-
 const FormSubmit = styled.input`
     background: #17BEBB;
     border: none;
@@ -57,9 +64,9 @@ const FormSubmit = styled.input`
 
 const Form = styled.form`
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    height: calc(14px + 20vmin);
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(14px + 30vmin);
 `
 
 function AddressSelector(): React.ReactElement {
@@ -165,13 +172,15 @@ export function FormHero(): React.ReactElement {
     }
 
     return <>
-        <Form onSubmit={submitHandler}>
-            {formInputs[inputIndex]}
-            <FormSubmit type='submit' value="Submit"/>
-        </Form>
-        <SliderButtonContainer>
+        <FormContainer>
             <SliderButton onClick={clickHandler(Direction.L)}>&lt;</SliderButton>
+            <Form onSubmit={submitHandler}>
+                <InputContainer>
+                    {formInputs[inputIndex]}
+                </InputContainer>
+                <FormSubmit type='submit' value="Submit"/>
+            </Form>
             <SliderButton onClick={clickHandler(Direction.R)}>&gt;</SliderButton>
-        </SliderButtonContainer>       
+        </FormContainer>
     </>
 }
