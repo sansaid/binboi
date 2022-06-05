@@ -1,15 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-type InputType = {
-    placeholder: string
-    type: string
-    onChangeHandler: React.ChangeEventHandler,
-    defaultValue: () => string
-}
-
-type InputSet = Array<InputType>
-
 enum Direction {
     L = "L",
     R = "R"
@@ -37,6 +28,21 @@ const FormInput = styled.input`
     margin: 4px;
 `
 
+const FormSelect = styled.select`
+    background: #4C4246;
+    border: none;
+    padding: 10px;
+    font-size: calc(14px + 2vmin);
+    color: white;
+    border-radius: 6px;
+    margin: 4px;
+`
+
+const AddressSelectorContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`
+
 const FormSubmit = styled.input`
     background: #17BEBB;
     border: none;
@@ -46,27 +52,58 @@ const FormSubmit = styled.input`
     border-radius: 6px;
     margin: 4px;
     font-weight: 700;
+    height: calc(14px + 6vmin);
 `
 
+const Form = styled.form`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: calc(14px + 20vmin);
+`
+
+function AddressSelector(): React.ReactElement {
+    let [addresses, setAddresses] = useState([])
+
+    async function getAddresses(e: React.ChangeEvent<HTMLInputElement>) {
+        if (e.target.value.length > 5) {
+            let encodedPostcode = encodeURIComponent(e.target.value)
+            let res = await fetch(`https://fc013299-77c1-4990-8b26-aaff9d512e75.mock.pstmn.io/${encodedPostcode}`)
+
+            let addresses = await res.json()
+    
+            if ("Addresses" in addresses) {
+                setAddresses(addresses.Addresses)
+            }
+        }
+    }
+
+    return <>
+        <AddressSelectorContainer>
+            <FormInput type="text" placeholder="Postcode" onChange={getAddresses}/>
+            <FormSelect id="addresses" name="addresses">
+                {addresses.length === 0 ? <option value="">Addresses not found</option> : addresses.map((address) => {
+                    return <option key={address["SiteId"]} value={address["AccountSiteUprn"]}>{address["SiteShortAddress"]}</option>
+                })}
+            </FormSelect>
+        </AddressSelectorContainer>
+    </>
+}
+
 // REF: https://www.techomoro.com/submit-a-form-data-to-rest-api-in-a-react-app/
-function Form(): React.ReactElement {
-    const [address, setAddress] = useState("")
-    const [mobileNumber, setMobileNumber] = useState("")
+export function FormHero(): React.ReactElement {
+    const [address, setAddress] = useState('')
+    const [mobileNumber, setMobileNumber] = useState('')
     const [inputIndex, setInputIndex] = useState(0)
 
-    const inputTypes: InputSet = [
-        {
-            placeholder: 'Mobile number',
-            type: 'text',
-            onChangeHandler: (e: React.ChangeEvent<HTMLInputElement>) => { setMobileNumber(e.target.value)  },
-            defaultValue: () => mobileNumber
-        },
-        {
-            placeholder: 'Address',
-            type: 'text',
-            onChangeHandler: (e: React.ChangeEvent<HTMLInputElement>) => { setAddress(e.target.value)  },
-            defaultValue: () => address
-        }
+    const formInputs: Array<React.ReactElement> = [
+        <FormInput 
+            onKeyDown={keydownHandler} 
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setMobileNumber(e.target.value)  }} 
+            type='text'
+            placeholder='Mobile number'
+        />,
+        <AddressSelector/>
     ]
 
     async function submitHandler(e: React.FormEvent) {
@@ -96,7 +133,7 @@ function Form(): React.ReactElement {
         if (e.key === 'Enter') {
             e.preventDefault()
 
-            if (inputIndex === (inputTypes.length - 1)) {
+            if (inputIndex === (formInputs.length - 1)) {
                 return inputIndex
             }
 
@@ -108,7 +145,7 @@ function Form(): React.ReactElement {
         return (e: React.MouseEvent) => {
             switch(direction) {
                 case Direction.R:
-                    if (inputIndex === (inputTypes.length - 1)) {
+                    if (inputIndex === (formInputs.length - 1)) {
                         return inputIndex
                     }
 
@@ -127,32 +164,14 @@ function Form(): React.ReactElement {
         }
     }
 
-    function getInputType(index: number, inputs: InputSet) {
-        return <>
-            <FormInput 
-                onKeyDown={keydownHandler} 
-                onChange={inputs[index].onChangeHandler} 
-                type={inputs[index].type} 
-                placeholder={inputs[index].placeholder} 
-                value={inputs[index].defaultValue()}
-            />
-        </>
-    }
-
     return <>
-        <form onSubmit={submitHandler}>
-            {getInputType(inputIndex, inputTypes)}
-            <FormSubmit type='submit' value="Bin me binboi"/>
-        </form>
+        <Form onSubmit={submitHandler}>
+            {formInputs[inputIndex]}
+            <FormSubmit type='submit' value="Submit"/>
+        </Form>
         <SliderButtonContainer>
             <SliderButton onClick={clickHandler(Direction.L)}>&lt;</SliderButton>
             <SliderButton onClick={clickHandler(Direction.R)}>&gt;</SliderButton>
         </SliderButtonContainer>       
-    </>
-}
-
-export function FormSlider(): React.ReactElement {
-    return <>
-        <Form/> 
     </>
 }
