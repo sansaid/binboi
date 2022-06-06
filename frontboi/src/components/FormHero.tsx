@@ -173,14 +173,14 @@ export function FormHero(): React.ReactElement {
 
     return <>
         <FormContainer>
-            <SliderButton onClick={clickHandler(Direction.L)}>&lt;</SliderButton>
+            <SliderButton onClick={clickHandler(Direction.L)}>👈</SliderButton>
             <Form onSubmit={submitHandler}>
                 <InputContainer>
                     {formInputs[inputIndex]}
                 </InputContainer>
                 <FormSubmit type='submit' value="Submit"/>
             </Form>
-            <SliderButton onClick={clickHandler(Direction.R)}>&gt;</SliderButton>
+            <SliderButton onClick={clickHandler(Direction.R)}>👉</SliderButton>
         </FormContainer>
     </>
 }
