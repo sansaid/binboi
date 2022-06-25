@@ -1,0 +1,103 @@
+openapi: "3.0.0"
+info:
+  version: 0.1.0
+  title: Binboi API
+  description: An API for getting bin collection details from Reading council
+paths:
+  /addresses/{postcode}:
+    get:
+      description: Returns list of addresses that match the given postcode
+      operationId: path-get-addresses-by-postcode
+      parameters:
+        - name: postcode
+          in: path
+          description: Postcode of the addresses to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Addresses matching postcode
+          content:
+            application/json:
+              schema:
+                $ref: 'https://api.reading.gov.uk/v0.json#/components/schema/Addresses'
+        default:
+          description: Default error message to return to clients
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+  /collection/subscribe:
+    post:
+      description: Subscribe to bin collection notifications
+      operationId: path-post-collection-subscribe
+      requestBody:
+        description: Subscription details to add for bin collection notifications
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Success'
+      responses:
+        '202':
+          description: Subscription successfully acknowledged
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/Status'
+        '409':
+          description: An active subscription already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schema/Status'        
+        default:
+          description: Default error message to return to clients
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+  # TODO: This shouldn't be publicly accessible - make it obvious in API schema
+  /collection/subscribe/{subscriptionId}: 
+    get:
+      description: Get the details of an existing subscription based on its ID
+      operationId: path-get-collection-subscribe
+      parameters:
+        - name: subscriptionId
+          in: path
+          description: ID of the subscription being queried
+          required: true
+          schema:
+            type: string
+      responses:
+        # TODO
+
+# Using RFC3986 for external referencing of schemas: https://swagger.io/docs/specification/using-ref/
+components:
+  schemas:
+    Success:
+      type: object
+    Subscription:
+      type: object
+      required:
+        - mobileNumber
+        - siteUprn
+      properties:
+        mobileNumber:
+          type: string
+          description: The mobile number in which to receive bin collection notifications
+        siteUprn:
+          type: string
+          description: The UPRN that uniquely identifies a subscriber's bin collection schedule based on their address
+    Status:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
