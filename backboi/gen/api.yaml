@@ -1,4 +1,4 @@
-openapi: "3.0.0"
+openapi: "3.1.0"
 info:
   version: 0.1.0
   title: Binboi API
@@ -7,7 +7,7 @@ paths:
   /addresses/{postcode}:
     get:
       description: Returns list of addresses that match the given postcode
-      operationId: path-get-addresses-by-postcode
+      operationId: get-addresses
       parameters:
         - name: postcode
           in: path
@@ -21,7 +21,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'https://api.reading.gov.uk/v0.json#/components/schema/Addresses'
+                $ref: '#/components/schemas/Addresses'
         default:
           description: Default error message to return to clients
           content:
@@ -31,7 +31,7 @@ paths:
   /collection/subscribe:
     post:
       description: Subscribe to bin collection notifications
-      operationId: path-post-collection-subscribe
+      operationId: subscribe
       requestBody:
         description: Subscription details to add for bin collection notifications
         required: true
@@ -45,13 +45,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schema/Status'
+                $ref: '#/components/schemas/Status'
         '409':
           description: An active subscription already exists
           content:
             application/json:
               schema:
-                $ref: '#/components/schema/Status'        
+                $ref: '#/components/schemas/Status'        
         default:
           description: Default error message to return to clients
           content:
@@ -62,7 +62,7 @@ paths:
   /collection/subscribe/{subscriptionId}: 
     get:
       description: Get the details of an existing subscription based on its ID
-      operationId: path-get-collection-subscribe
+      operationId: get-subscription-details
       parameters:
         - name: subscriptionId
           in: path
@@ -71,8 +71,25 @@ paths:
           schema:
             type: string
       responses:
-        # TODO
-
+        '202':
+          description: Subscription successfully acknowledged - still pending
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+        '201':
+          description: Subscription successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'        
+        default:
+          description: Default error message to return to clients
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+        
 # Using RFC3986 for external referencing of schemas: https://swagger.io/docs/specification/using-ref/
 components:
   schemas:
@@ -101,3 +118,43 @@ components:
           format: int32
         message:
           type: string
+    Address:
+      type: object
+      description: Bin collection point address - as referenced in https://api.reading.gov.uk/v0.json#/components/schemas/Address'
+      required:
+      properties:
+        AccountSiteId:
+          type: string
+          example: '71454'
+        AccountSiteUprn:
+          type: string
+          example: '310072455'
+        SiteAddress2:
+          type: string
+          example: 'ST GILES CLOSE'
+        SiteAddressPrefix:
+          type: string
+          example: 'None'
+        SiteEasting:
+          type: string
+          example: '471811.0'
+        SiteId:
+          type: string
+          example: '64711'
+        SiteLatitude:
+          type: string
+          example: '51.4510090644'
+        SiteLongitude:
+          type: string
+          example: '-0.967964890157'
+        SiteNorthing:
+          type: string
+          example: '172954.0'
+        SiteShortAddress:
+          type: string
+          example: 'ALDER HOUSE, FLAT 1, ST GILES CLOSE, RG1 2AR'
+    Addresses:
+      type: array
+      description: List of addresses - as referenced in https://api.reading.gov.uk/v0.json#/components/schemas/Addresses'
+      items:
+        $ref: '#/components/schemas/Address'
