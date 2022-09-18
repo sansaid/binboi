@@ -12,6 +12,9 @@ on:
     - 'cicd/**'
     - dev
 
+defaults:
+  runs-on: ubuntu-latest
+
 # TODO: change jobs to work with matrix
 # TODO: create a custom container to run these jobs in: https://docs.github.com/en/actions/using-jobs/running-jobs-in-a-container
 # TODO: find a way to make `runs-on` common for all jobs
@@ -19,7 +22,6 @@ on:
 # See how to run with containers in Github Actions: https://docs.github.com/en/actions/using-jobs/running-jobs-in-a-container
 jobs:
   backboi:
-    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: backboi
@@ -35,7 +37,6 @@ jobs:
       - name: Check codebase builds successfully
         run: go build -v ./...
   frontboi:
-    runs-on: ubuntu-latest
     defaults:
         run:
           working-directory: frontboi
