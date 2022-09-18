@@ -1,6 +1,19 @@
-# Getting Started with Create React App
+# Binboi - frontboi
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+`frontboi` is just a silly name for the frontend of Binboi. This is where the UI code resides.
+
+This is still a work in progress. See [TODOs](#todo) for a list of things left to implement.
+
+## TODO
+_! = no dependencies, otherwise the order of the list determines when things should be executed from first to last_
+
+- [ ] !Add form validation
+- [ ] !Add a button navigator for the form (also allow it to light up to show if there are any errors)
+- [ ] !Add animation for transitioning between form inputs
+- [ ] !Form expands when the address field is long - fix input and submit button width
+- [ ] !Create a defaults.css which is applied globally to the app (replace App.css with this)
+- [ ] !Add proper types to const values - basically make Typescript more consitent
+- [ ] !Separate API calls in frontend so that it's clear what API calls the frontend is making to the backend (makes it easier to perform API contracting)
 
 ## Available Scripts
 
