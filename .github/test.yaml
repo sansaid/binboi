@@ -3,11 +3,13 @@ on:
     branches:
     - main
     - 'release/**'
+    - 'cicd/**'
     - dev
   pull_request:
     branches:
     - main
     - 'release/**'
+    - 'cicd/**'
     - dev
 
 defaults:
