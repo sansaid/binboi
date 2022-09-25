@@ -10,6 +10,6 @@ on:
 
 jobs:
   test-frontboi:
-    uses: fuz95esi/binboi/.github/workflows/reusable-test-frontboi.yaml@master
+    uses: ./.github/workflows/reusable-test-frontboi.yaml
   test-backboi:
-    uses: fuz95esi/binboi/.github/workflows/reusable-test-backboi.yaml@master
+    uses: ./.github/workflows/reusable-test-backboi.yaml

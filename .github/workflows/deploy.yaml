@@ -10,9 +10,9 @@ env:
 
 jobs:
   test-backboi:
-    uses: fuz95esi/binboi/.github/workflows/reusable-test-backboi.yaml@master
+    uses: ./.github/workflows/reusable-test-backboi.yaml
   test-frontboi:
-    uses: fuz95esi/binboi/.github/workflows/reusable-test-frontboi.yaml@master
+    uses: ./.github/workflows/reusable-test-frontboi.yaml
   deploy:
     name: Deploy components
     strategy:
