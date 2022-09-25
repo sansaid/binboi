@@ -80,3 +80,7 @@ func (p *Proxy) Subscribe(ctx echo.Context) error {
 func (p *Proxy) GetSubscriptionDetails(ctx echo.Context, subscriptionId string) error {
 	return ctx.JSON(http.StatusNotImplemented, statusCode(StatusNotImplemented, "GetSubscriptionDetails"))
 }
+
+func (p *Proxy) Health(ctx echo.Context) error {
+	return ctx.JSON(http.StatusOK, statusCode(StatusSuccess, "health check successful"))
+}
