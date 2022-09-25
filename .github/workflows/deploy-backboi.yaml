@@ -16,6 +16,7 @@ jobs:
     name: Deploy backboi
     uses: ./.github/workflows/reusable-deploy.yaml
     with:
-      fly-api-token: ${{ secrets.FLY_API_TOKEN }}
       component: backboi
+    secrets:
+      fly-api-token: ${{ secrets.FLY_API_TOKEN }}
     needs: [ test-backboi ]
