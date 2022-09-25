@@ -34,5 +34,5 @@ func main() {
 	api.RegisterHandlers(e, proxy)
 
 	// Start server
-	e.Logger.Fatal(e.Start(":443"))
+	e.Logger.Fatal(e.Start(":8080"))
 }
