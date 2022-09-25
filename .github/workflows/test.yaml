@@ -1,7 +1,8 @@
+name: test-binboi
+
 on:
   push:
     branches:
-    - master
     - 'release/**'
     - 'cicd/**'
     - dev
@@ -18,7 +19,7 @@ on:
 
 # See how to run with containers in Github Actions: https://docs.github.com/en/actions/using-jobs/running-jobs-in-a-container
 jobs:
-  backboi:
+  test-backboi:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -34,7 +35,7 @@ jobs:
         run: go test -v ./...
       - name: Check codebase builds successfully
         run: go build -v ./...
-  frontboi:
+  test-frontboi:
     runs-on: ubuntu-latest
     defaults:
         run:
