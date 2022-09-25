@@ -1,6 +1,15 @@
 name: reusable-test-backboi
 
 on:
+  pull_request:
+    branches:
+    - master
+    - 'release/**'
+    - 'cicd/**'
+    - dev
+    paths:
+      - backboi/**
+      - .github/**
   workflow_call:
   
 jobs:

@@ -1,0 +1,21 @@
+name: deploy-frontboi
+
+on:
+  push:
+    paths:
+      - frontboi/**
+      - .github/**
+    branches:
+    - master
+
+jobs:
+  test-backboi:
+    name: Test frontboi
+    uses: ./.github/workflows/reusable-test-frontboi.yaml
+  deploy-backboi:
+    name: Deploy frontboi
+    uses: ./.github/workflows/reusable-deploy.yaml
+    with:
+      fly-api-token: ${{ secrets.FLY_API_TOKEN }}
+      component: frontboi
+    needs: [ test-frontboi ]
