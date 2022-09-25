@@ -1,4 +1,4 @@
-name: test-binboi
+name: reusable-test-binboi
 
 on:
   workflow_call:

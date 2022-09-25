@@ -10,4 +10,4 @@ on:
 
 jobs:
   test-all:
-    uses: fuz95esi/binboi/.github/workflows/reusables/test-binboi.yaml@master
+    uses: fuz95esi/binboi/.github/workflows/reusable-test-binboi.yaml@master
