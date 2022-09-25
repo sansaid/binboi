@@ -16,6 +16,7 @@ jobs:
     name: Deploy frontboi
     uses: ./.github/workflows/reusable-deploy.yaml
     with:
-      fly-api-token: ${{ secrets.FLY_API_TOKEN }}
       component: frontboi
+    secrets:
+      fly-api-token: ${{ secrets.FLY_API_TOKEN }}
     needs: [ test-frontboi ]
