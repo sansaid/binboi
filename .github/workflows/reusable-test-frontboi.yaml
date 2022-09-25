@@ -2,6 +2,15 @@ name: reusable-test-frontboi
 
 on:
   workflow_call:
+  pull_request:
+    branches:
+    - master
+    - 'release/**'
+    - 'cicd/**'
+    - dev
+    paths:
+      - frontboi/**
+      - .github/**
 
 jobs:
   test-frontboi:

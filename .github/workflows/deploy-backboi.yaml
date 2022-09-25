@@ -1,0 +1,21 @@
+name: deploy-binboi
+
+on:
+  push:
+    paths:
+      - backboi/**
+      - .github/**
+    branches:
+    - master
+
+jobs:
+  test-backboi:
+    name: Test backboi
+    uses: ./.github/workflows/reusable-test-backboi.yaml
+  deploy-backboi:
+    name: Deploy backboi
+    uses: ./.github/workflows/reusable-deploy.yaml
+    with:
+      fly-api-token: ${{ secrets.FLY_API_TOKEN }}
+      component: backboi
+    needs: [ test-backboi ]
