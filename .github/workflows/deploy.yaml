@@ -14,7 +14,7 @@ jobs:
   deploy-binboi:
       name: Deploy binboi
       runs-on: ubuntu-latest
-      needs: [ test-frontboi, test-backboi ]
+      needs: [ test-all ]
       steps:
         - uses: actions/checkout@v2
         - uses: superfly/flyctl-actions/setup-flyctl@master
