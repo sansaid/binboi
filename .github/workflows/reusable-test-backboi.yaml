@@ -1,0 +1,23 @@
+name: reusable-test-backboi
+
+on:
+  workflow_call:
+  
+jobs:
+  test-backboi:
+    name: Test backboi
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backboi
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+      - name: Test codebase
+        run: go test -v ./...
+      - name: Check codebase builds successfully
+        run: go build -v ./...
