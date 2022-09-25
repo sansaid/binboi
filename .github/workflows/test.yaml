@@ -9,5 +9,5 @@ on:
     - dev
 
 jobs:
-  test-all:
+  test-binboi:
     uses: fuz95esi/binboi/.github/workflows/reusable-test-binboi.yaml@master
