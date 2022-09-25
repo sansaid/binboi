@@ -4,6 +4,23 @@ info:
   title: Binboi API
   description: An API for getting bin collection details from Reading council
 paths:
+  /health:
+    get:
+      description: Health check endpoint
+      operationId: health
+      responses:
+        '200':
+          description: API server successfully running
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+        default:
+          description: Default error message to return to clients
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
   /addresses/{postcode}:
     get:
       description: Returns list of addresses that match the given postcode
