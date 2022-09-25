@@ -1,0 +1,2 @@
+# Ignore gen directory used to generate code during development
+gen

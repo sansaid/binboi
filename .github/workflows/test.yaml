@@ -9,5 +9,7 @@ on:
     - dev
 
 jobs:
-  test-all:
-    uses: fuz95esi/binboi/.github/workflows/reusable-test-binboi.yaml@master
+  test-frontboi:
+    uses: ./.github/workflows/reusable-test-frontboi.yaml
+  test-backboi:
+    uses: ./.github/workflows/reusable-test-backboi.yaml
