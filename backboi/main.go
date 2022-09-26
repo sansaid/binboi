@@ -30,6 +30,7 @@ func main() {
 	e.Use(echomiddleware.Logger())
 	e.Use(echomiddleware.Recover())
 	e.Use(oapimiddleware.OapiRequestValidator(swagger))
+	e.Use(echomiddleware.CORS())
 
 	api.RegisterHandlers(e, proxy)
 
