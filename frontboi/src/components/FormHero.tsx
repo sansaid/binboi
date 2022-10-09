@@ -22,18 +22,11 @@ const InputContainer = styled.div`
     height: calc(14px + 25vmin);
 `
 
-const SliderButton = styled.button`
-    background-color: transparent;
-    border: none;
-    font-weight: bold;
-    color: white;
-    padding: calc(4px + 5vmin)
-`
-
 const FormInput = styled.input`
     background: #4C4246;
     border: none;
     padding: 10px;
+    width: calc(200px + 20vmin);
     font-size: calc(14px + 2vmin);
     color: white;
     border-radius: 6px;
@@ -44,16 +37,36 @@ const FormSelect = styled.select`
     background: #4C4246;
     border: none;
     padding: 10px;
+    width: calc(220px + 20vmin);
     font-size: calc(14px + 2vmin);
     color: white;
     border-radius: 6px;
     margin: 4px;
 `
 
+const FormButtonContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+`
+
+const FormNavigator = styled.button`
+    background: #13908D;
+    border: none;
+    width: calc(50px + 10vmin);
+    font-size: calc(14px + 2vmin);
+    color: #2E282A;
+    border-radius: 6px;
+    margin: 4px;
+    font-weight: 700;
+    height: calc(14px + 6vmin);
+`
+
 const FormSubmit = styled.input`
     background: #17BEBB;
     border: none;
-    padding: 10px;
+    width: calc(50px + 10vmin);
     font-size: calc(14px + 2vmin);
     color: #2E282A;
     border-radius: 6px;
@@ -104,6 +117,7 @@ export function FormHero(): React.ReactElement {
     const [address, setAddress] = useState('')
     const [mobileNumber, setMobileNumber] = useState('')
     const [inputIndex, setInputIndex] = useState(0)
+    const [showSubmit, setShowSubmit] = useState(false)
 
     const formInputs: Array<React.ReactElement> = [
         <FormInput 
@@ -150,39 +164,50 @@ export function FormHero(): React.ReactElement {
         }
     }
 
-    function clickHandler(direction: Direction): React.MouseEventHandler {
+    function navigatorClickHandler(direction: Direction): React.MouseEventHandler {
         return (e: React.MouseEvent) => {
+            let isCurrInputLastFormInput = inputIndex === (formInputs.length - 1)
+            let isCurrInputFirstFormInput = inputIndex === 0
+            let isNextInputLastFormInput = inputIndex === (formInputs.length - 2)
+
             switch(direction) {
                 case Direction.R:
-                    if (inputIndex === (formInputs.length - 1)) {
+                    if (isCurrInputLastFormInput) {
                         return inputIndex
                     }
 
                     setInputIndex(inputIndex+1)
                     break;
                 case Direction.L:
-                    if (inputIndex === 0) {
+                    if (isCurrInputFirstFormInput) {
                         return inputIndex
                     }
 
                     setInputIndex(inputIndex-1)
                     break;
                 default:
-                    console.log(`Unrecognised direction declared: ${direction}`)
+                    console.log(`Unrecognised direction used: ${direction}`)
+            }
+
+            if (!showSubmit && isNextInputLastFormInput) {
+                setShowSubmit(true)
+            } else if (showSubmit && !isNextInputLastFormInput) {
+                setShowSubmit(false)
             }
         }
     }
 
     return <>
         <FormContainer>
-            <SliderButton onClick={clickHandler(Direction.L)}>👈</SliderButton>
             <Form onSubmit={submitHandler}>
                 <InputContainer>
                     {formInputs[inputIndex]}
                 </InputContainer>
-                <FormSubmit type='submit' value="Submit"/>
+                <FormButtonContainer>
+                    <FormNavigator onClick={navigatorClickHandler(Direction.L)}>Back</FormNavigator>
+                    { showSubmit ? <FormSubmit type='submit' value="Submit"/> : <FormNavigator onClick={navigatorClickHandler(Direction.R)}>Next</FormNavigator> }
+                </FormButtonContainer>
             </Form>
-            <SliderButton onClick={clickHandler(Direction.R)}>👉</SliderButton>
         </FormContainer>
     </>
 }
