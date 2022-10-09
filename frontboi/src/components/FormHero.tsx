@@ -18,8 +18,8 @@ const AddressSelectorContainer = styled.div`
 
 const InputContainer = styled.div`
     display: flex;
-    align-items: center;
     height: calc(14px + 25vmin);
+    align-content: flex-start;
 `
 
 const FormInput = styled.input`
@@ -27,6 +27,7 @@ const FormInput = styled.input`
     border: none;
     padding: 10px;
     width: calc(200px + 20vmin);
+    height: 7vmin;
     font-size: calc(14px + 2vmin);
     color: white;
     border-radius: 6px;
@@ -38,23 +39,24 @@ const FormSelect = styled.select`
     border: none;
     padding: 10px;
     width: calc(220px + 20vmin);
+    height: 8vmin;
     font-size: calc(14px + 2vmin);
     color: white;
     border-radius: 6px;
-    margin: 4px;
+    margin: 20px 4px;
 `
 
 const FormButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content: space-between;
 `
 
 const FormNavigator = styled.button`
-    background: #13908D;
+    background: #6369D1;
     border: none;
-    width: calc(50px + 10vmin);
+    width: calc(100px + 10vmin);
     font-size: calc(14px + 2vmin);
     color: #2E282A;
     border-radius: 6px;
@@ -66,7 +68,7 @@ const FormNavigator = styled.button`
 const FormSubmit = styled.input`
     background: #17BEBB;
     border: none;
-    width: calc(50px + 10vmin);
+    width: calc(100px + 10vmin);
     font-size: calc(14px + 2vmin);
     color: #2E282A;
     border-radius: 6px;
@@ -156,11 +158,18 @@ export function FormHero(): React.ReactElement {
         if (e.key === 'Enter') {
             e.preventDefault()
 
-            if (inputIndex === (formInputs.length - 1)) {
-                return inputIndex
+            let isCurrInputLastFormInput = inputIndex === (formInputs.length - 1)
+            let isNextInputLastFormInput = inputIndex === (formInputs.length - 2)
+
+            if (!isCurrInputLastFormInput) {
+                setInputIndex(inputIndex+1)   
             }
 
-            setInputIndex(inputIndex+1)
+            if (!showSubmit && isNextInputLastFormInput) {
+                setShowSubmit(true)
+            } else if (showSubmit && !isNextInputLastFormInput) {
+                setShowSubmit(false)
+            }
         }
     }
 
