@@ -9,10 +9,10 @@ on:
     - master
 
 jobs:
-  test-backboi:
+  test-frontboi:
     name: Test frontboi
     uses: ./.github/workflows/reusable-test-frontboi.yaml
-  deploy-backboi:
+  deploy-frontboi:
     name: Deploy frontboi
     uses: ./.github/workflows/reusable-deploy.yaml
     with:
