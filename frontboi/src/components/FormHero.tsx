@@ -73,14 +73,16 @@ function AddressSelector(): React.ReactElement {
     let [addresses, setAddresses] = useState([])
 
     async function getAddresses(e: React.ChangeEvent<HTMLInputElement>) {
-        if (e.target.value.length > 5) {
+        if (e.target.value.length > 3) {
             let encodedPostcode = encodeURIComponent(e.target.value)
-            let res = await fetch(`https://fc013299-77c1-4990-8b26-aaff9d512e75.mock.pstmn.io/${encodedPostcode}`)
+            let res = await fetch(`https://binboi-server.fly.dev/addresses/${encodedPostcode}`)
 
             let addresses = await res.json()
     
             if ("Addresses" in addresses) {
-                setAddresses(addresses.Addresses)
+                if (Array.isArray(addresses.Addresses)) {
+                    setAddresses(addresses.Addresses)
+                }
             }
         }
     }
