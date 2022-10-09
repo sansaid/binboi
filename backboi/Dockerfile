@@ -15,6 +15,6 @@ RUN go mod download && \
 # --- Run
 FROM base as run
 
-COPY --from=build /build/server /build
+COPY --from=build /build/server /build/
 
 ENTRYPOINT [ "/build/server" ]
