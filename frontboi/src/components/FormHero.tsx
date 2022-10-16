@@ -54,19 +54,25 @@ const FormButtonContainer = styled.div`
 `
 
 const FormNavigator = styled.button`
-    background: #6369D1;
-    border: none;
+    background: rgba(0,0,0,0);
+    border: solid 0.2em #6E75FF;
     width: calc(100px + 10vmin);
     font-size: calc(14px + 2vmin);
-    color: #2E282A;
+    color: #6E75FF;
     border-radius: 6px;
     margin: 4px;
     font-weight: 700;
     height: calc(14px + 6vmin);
 `
 
+const FormNavigatorCta = styled(FormNavigator)`
+    background: #6E75FF;
+    border: none;
+    color: #2E282A;
+`
+
 const FormSubmit = styled.input`
-    background: #17BEBB;
+    background: #1BDAD7;
     border: none;
     width: calc(100px + 10vmin);
     font-size: calc(14px + 2vmin);
@@ -214,7 +220,7 @@ export function FormHero(): React.ReactElement {
                 </InputContainer>
                 <FormButtonContainer>
                     <FormNavigator onClick={navigatorClickHandler(Direction.L)}>Back</FormNavigator>
-                    { showSubmit ? <FormSubmit type='submit' value="Submit"/> : <FormNavigator onClick={navigatorClickHandler(Direction.R)}>Next</FormNavigator> }
+                    { showSubmit ? <FormSubmit type='submit' value="Submit"/> : <FormNavigatorCta onClick={navigatorClickHandler(Direction.R)}>Next</FormNavigatorCta> }
                 </FormButtonContainer>
             </Form>
         </FormContainer>
