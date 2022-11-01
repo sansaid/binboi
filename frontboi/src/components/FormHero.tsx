@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 enum Direction {
@@ -91,7 +91,7 @@ const Form = styled.form`
     height: calc(14px + 30vmin);
 `
 
-function AddressSelector(): React.ReactElement {
+function AddressSelector(props: { onKeyDown: (e: React.KeyboardEvent) => void }): React.ReactElement {
     let [addresses, setAddresses] = useState([])
 
     async function getAddresses(e: React.ChangeEvent<HTMLInputElement>) {
@@ -111,7 +111,7 @@ function AddressSelector(): React.ReactElement {
 
     return <>
         <AddressSelectorContainer>
-            <FormInput type="text" placeholder="Postcode" onChange={getAddresses}/>
+            <FormInput type="text" placeholder="Postcode" onKeyDown={props.onKeyDown} onChange={getAddresses} />
             <FormSelect id="addresses" name="addresses">
                 {addresses.length === 0 ? <option value="">Addresses not found</option> : addresses.map((address) => {
                     return <option key={address["SiteId"]} value={address["AccountSiteUprn"]}>{address["SiteShortAddress"]}</option>
@@ -124,19 +124,20 @@ function AddressSelector(): React.ReactElement {
 // REF: https://www.techomoro.com/submit-a-form-data-to-rest-api-in-a-react-app/
 export function FormHero(): React.ReactElement {
     const [address, setAddress] = useState('')
-    const [mobileNumber, setMobileNumber] = useState('')
     const [inputIndex, setInputIndex] = useState(0)
     const [showSubmit, setShowSubmit] = useState(false)
+    const [showSubmitOnly, setShowSubmitOnly] = useState(false)
 
     const formInputs: Array<React.ReactElement> = [
-        <FormInput 
-            onKeyDown={keydownHandler} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setMobileNumber(e.target.value)  }} 
-            type='text'
-            placeholder='Mobile number'
-        />,
-        <AddressSelector/>
+        <AddressSelector onKeyDown={keydownHandler} />
     ]
+
+    useEffect(() => {
+        // If there's only one element in the form, just show the submit button only
+        if (formInputs.length === 1) {
+            setShowSubmitOnly(true)
+        }
+    }, [formInputs.length]);
 
     async function submitHandler(e: React.FormEvent) {
         e.preventDefault();
@@ -147,14 +148,12 @@ export function FormHero(): React.ReactElement {
             let res = await fetch(API, {
                 method: "POST",
                 body: JSON.stringify({
-                    mobileNumber: mobileNumber,
                     address: address
                 }),
             });
             
             if (res.status === 200) {
                 setAddress("");
-                setMobileNumber("");
             }
         } catch (err) {
             console.log(err);
@@ -220,8 +219,8 @@ export function FormHero(): React.ReactElement {
                     {formInputs[inputIndex]}
                 </InputContainer>
                 <FormButtonContainer>
-                    <FormNavigator onClick={navigatorClickHandler(Direction.L)}>Back</FormNavigator>
-                    { showSubmit ? <FormSubmit type='submit' value="Submit"/> : <FormNavigatorCta onClick={navigatorClickHandler(Direction.R)}>Next</FormNavigatorCta> }
+                    { showSubmitOnly ? <></> : <FormNavigatorSecondary onClick={navigatorClickHandler(Direction.L)}>Back</FormNavigatorSecondary> }
+                    { showSubmit || showSubmitOnly ? <FormSubmit type='submit' value="Submit"/> : <FormNavigatorPrimary onClick={navigatorClickHandler(Direction.R)}>Next</FormNavigatorPrimary> }
                 </FormButtonContainer>
             </Form>
         </FormContainer>
