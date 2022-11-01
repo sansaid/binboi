@@ -21,8 +21,8 @@ All running commands and instructions can be found in the [Makefile](./Makefile)
 ## TODO
 _! = no dependencies, otherwise the order of the list determines when things should be executed from first to last_
 
-- [ ] !Implement the `Subscribe` and `GetSubscriptionDetails` methods for Backboi API
-- [ ] !Decide on where to deploy backboi
-- [ ] !Write deployment pipeline boilerplate for backboi
-- [ ] !Automate testing with a pipeline (e.g. Github Workflow)
+- [ ] Implement collections API
+- [x] !Decide on where to deploy backboi
+- [x] !Write deployment pipeline boilerplate for backboi
+- [x] !Automate testing with a pipeline (e.g. Github Workflow)
 - [ ] !Think about how we can use Postman to automate testing the Echo handlers (by mocking the Reading API with it) - if we can't use Postman, we should think of another way

@@ -45,61 +45,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
-  /collection/subscribe:
-    post:
-      description: Subscribe to bin collection notifications
-      operationId: subscribe
-      requestBody:
-        description: Subscription details to add for bin collection notifications
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Success'
-      responses:
-        '202':
-          description: Subscription successfully acknowledged
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Status'
-        '409':
-          description: An active subscription already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Status'        
-        default:
-          description: Default error message to return to clients
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Status'
-  # TODO: This shouldn't be publicly accessible - make it obvious in API schema
-  /collection/subscribe/{subscriptionId}: 
+  /collections/{uprn}:
     get:
-      description: Get the details of an existing subscription based on its ID
-      operationId: get-subscription-details
+      description: Get list of collection dates for UPRN
+      operationId: get-collection-dates
       parameters:
-        - name: subscriptionId
+        - name: uprn
           in: path
-          description: ID of the subscription being queried
+          description: The UPRN code of the address whose collection dates we're trying to retrieve 
           required: true
           schema:
             type: string
+        - name: from_date
+          in: query
+          description: Start date of when collection date list will be generated from (in YYYY-MM-DD format)
+          schema:
+            type: string
+        - name: to_date
+          in: query
+          description: End date of when collection date list will be generated from (in YYYY-MM-DD format)
+          schema:
+            type: string
       responses:
-        '202':
-          description: Subscription successfully acknowledged - still pending
+        '200':
+          description: List of collection dates for UPRN
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Status'
-        '201':
-          description: Subscription successfully created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Status'        
+                $ref: '#/components/schemas/Collections'   
         default:
           description: Default error message to return to clients
           content:
@@ -110,20 +83,37 @@ paths:
 # Using RFC3986 for external referencing of schemas: https://swagger.io/docs/specification/using-ref/
 components:
   schemas:
-    Success:
+    Collection:
       type: object
-    Subscription:
-      type: object
-      required:
-        - mobileNumber
-        - siteUprn
       properties:
-        mobileNumber:
+        service:
           type: string
-          description: The mobile number in which to receive bin collection notifications
-        siteUprn:
+        round:
           type: string
-          description: The UPRN that uniquely identifies a subscriber's bin collection schedule based on their address
+        schedule:
+          type: string
+        day:
+          type: string
+        date:
+          type: string
+        read_date:
+          type: string
+    Collections:
+      type: object
+      properties:
+        uprn:
+          type: string
+        success:
+          type: boolean
+        error_code:
+          type: integer
+        error_description:
+          type: string
+        collections:
+          type: array
+          description: List of collections for associated UPRN
+          items:
+            $ref: '#/components/schemas/Collection'
     Status:
       type: object
       required:
@@ -132,7 +122,6 @@ components:
       properties:
         code:
           type: integer
-          format: int32
         message:
           type: string
     Address:
