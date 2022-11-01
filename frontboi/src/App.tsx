@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <p>
-        👋 I'm <CodeTxt>binboi</CodeTxt> and I can remind you of your next bin collection day.
+        👋 I'm <CodeTxt>binboi</CodeTxt> and I can generate a bin collection calendar for you.
       </p>
       <FormHero/>
     </div>
