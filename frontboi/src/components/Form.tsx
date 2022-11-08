@@ -1,7 +1,10 @@
 import styled from 'styled-components'
 
-export const FormSubmit = styled.input`
+export const FormSubmit = styled.a`
     background: #1BDAD7;
+    display: block;
+    text-align: center;
+    line-height: 70px;
     border: none;
     font-size: calc(14px + 2vmin);
     color: #2E282A;
@@ -10,6 +13,7 @@ export const FormSubmit = styled.input`
     font-weight: 700;
     height: calc(14px + 6vmin);
     flex-grow: 1;
+    cursor: pointer;
 `
 
 export const FormSelect = styled.select`

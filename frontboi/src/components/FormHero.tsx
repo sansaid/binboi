@@ -1,101 +1,56 @@
-import React, { useEffect, useState } from 'react'
+import { ReturnObject } from 'ics'
+import React, { useState } from 'react'
+import { collectionsToIcs, Collection } from '../helpers/convert_to_ics'
 import { AddressSelector } from './AddressSelector'
 import { Form, FormSubmit, FormContainer, InputContainer } from './Form'
-import { FormButtonContainer, FormNavigatorSecondary, FormNavigatorPrimary } from './FormNavigators'
+import { FormButtonContainer } from './FormNavigators'
 
-enum Direction {
-    L = "L",
-    R = "R"
-}
 
 // REF: https://www.techomoro.com/submit-a-form-data-to-rest-api-in-a-react-app/
 export function FormHero(): React.ReactElement {
-    const [address, setAddress] = useState('')
-    const [inputIndex, setInputIndex] = useState(0)
-    const [showSubmit, setShowSubmit] = useState(false)
-    const [showSubmitOnly, setShowSubmitOnly] = useState(false)
+    const [uprn, setUprn] = useState('')
+    const [downloadUrl, setDownloadUrl] = useState('')
 
-    const formInputs: Array<React.ReactElement> = [
-        <AddressSelector onKeyDown={keydownHandler} />
-    ]
-
-    useEffect(() => {
-        // If there's only one element in the form, just show the submit button only
-        if (formInputs.length === 1) {
-            setShowSubmitOnly(true)
-        }
-    }, [formInputs.length]);
+    function generateicsFilename(): string {
+        return `${uprn}-${new Date(Date.now()).toISOString()}.ics`
+    }
 
     async function submitHandler(e: React.FormEvent) {
         e.preventDefault();
+        
+        let yearFromNowDate: Date = new Date()
+        
+        yearFromNowDate.setFullYear(yearFromNowDate.getFullYear() + 1)
 
-        const API: string = ""
+        let yearFromNow: string = yearFromNowDate.toISOString().split('T')[0]
 
-        try {
-            let res = await fetch(API, {
-                method: "POST",
-                body: JSON.stringify({
-                    address: address
-                }),
-            });
-            
-            if (res.status === 200) {
-                setAddress("");
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
+        console.log(uprn)
 
-    function keydownHandler(e: React.KeyboardEvent) {
-        if (e.key === 'Enter') {
-            e.preventDefault()
+        if (uprn !== '') {
+            let res = await fetch(`https://binboi-api.fly.dev/collections/${uprn}?to_date=${yearFromNow}`)
+            let deserialisedRes = await res.json()
+            console.log(deserialisedRes)
 
-            let isCurrInputLastFormInput = inputIndex === (formInputs.length - 1)
-            let isNextInputLastFormInput = inputIndex === (formInputs.length - 2)
-
-            if (!isCurrInputLastFormInput) {
-                setInputIndex(inputIndex+1)   
-            }
-
-            if (!showSubmit && isNextInputLastFormInput) {
-                setShowSubmit(true)
-            } else if (showSubmit && !isNextInputLastFormInput) {
-                setShowSubmit(false)
+            if ("collections" in deserialisedRes) {
+                if (Array.isArray(deserialisedRes.collections)) {
+                    createDownloadUrl(deserialisedRes.collections)
+                }
             }
         }
     }
 
-    function navigatorClickHandler(direction: Direction): React.MouseEventHandler {
-        return (e: React.MouseEvent) => {
-            let isCurrInputLastFormInput = inputIndex === (formInputs.length - 1)
-            let isCurrInputFirstFormInput = inputIndex === 0
-            let isNextInputLastFormInput = inputIndex === (formInputs.length - 2)
+    function createDownloadUrl(collections: Array<Collection>) {
+        if (collections.length > 0) {
+            const icsRes: ReturnObject = collectionsToIcs(collections)
 
-            switch(direction) {
-                case Direction.R:
-                    if (isCurrInputLastFormInput) {
-                        return inputIndex
-                    }
-
-                    setInputIndex(inputIndex+1)
-                    break;
-                case Direction.L:
-                    if (isCurrInputFirstFormInput) {
-                        return inputIndex
-                    }
-
-                    setInputIndex(inputIndex-1)
-                    break;
-                default:
-                    console.log(`Unrecognised direction used: ${direction}`)
+            if (icsRes.error) {
+                console.log(`Error producing ics: ${icsRes.error}`)
+                return
             }
 
-            if (!showSubmit && isNextInputLastFormInput) {
-                setShowSubmit(true)
-            } else if (showSubmit && !isNextInputLastFormInput) {
-                setShowSubmit(false)
-            }
+            const icsBlob: Blob = new Blob([icsRes.value!])
+
+            setDownloadUrl(URL.createObjectURL(icsBlob))
         }
     }
 
@@ -103,11 +58,10 @@ export function FormHero(): React.ReactElement {
         <FormContainer>
             <Form onSubmit={submitHandler}>
                 <InputContainer>
-                    {formInputs[inputIndex]}
+                    <AddressSelector onChange={(e) => setUprn(e.target.value as string)}/>
                 </InputContainer>
                 <FormButtonContainer>
-                    { showSubmitOnly ? <></> : <FormNavigatorSecondary onClick={navigatorClickHandler(Direction.L)}>Back</FormNavigatorSecondary> }
-                    { showSubmit || showSubmitOnly ? <FormSubmit type='submit' value="Submit"/> : <FormNavigatorPrimary onClick={navigatorClickHandler(Direction.R)}>Next</FormNavigatorPrimary> }
+                    { downloadUrl === '' ? <FormSubmit onClick={submitHandler}>Submit</FormSubmit> : <FormSubmit href={downloadUrl} download={generateicsFilename()}>Download Reminders</FormSubmit>}
                 </FormButtonContainer>
             </Form>
         </FormContainer>

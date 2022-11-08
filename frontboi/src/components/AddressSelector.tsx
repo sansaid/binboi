@@ -7,7 +7,7 @@ export const AddressSelectorContainer = styled.div`
     flex-direction: column;
 `
 
-export function AddressSelector(props: { onKeyDown: (e: React.KeyboardEvent) => void }): React.ReactElement {
+export function AddressSelector(props: { onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void }): React.ReactElement {
     let [addresses, setAddresses] = useState([])
 
     async function getAddresses(e: React.ChangeEvent<HTMLInputElement>) {
@@ -15,11 +15,11 @@ export function AddressSelector(props: { onKeyDown: (e: React.KeyboardEvent) => 
             let encodedPostcode = encodeURIComponent(e.target.value)
             let res = await fetch(`https://binboi-api.fly.dev/addresses/${encodedPostcode}`)
 
-            let addresses = await res.json()
+            let deserialisedRes = await res.json()
     
-            if ("Addresses" in addresses) {
-                if (Array.isArray(addresses.Addresses)) {
-                    setAddresses(addresses.Addresses)
+            if ("Addresses" in deserialisedRes) {
+                if (Array.isArray(deserialisedRes.Addresses)) {
+                    setAddresses(deserialisedRes.Addresses)
                 }
             }
         }
@@ -27,8 +27,8 @@ export function AddressSelector(props: { onKeyDown: (e: React.KeyboardEvent) => 
 
     return <>
         <AddressSelectorContainer>
-            <FormInput type="text" placeholder="Postcode" onKeyDown={props.onKeyDown} onChange={getAddresses} />
-            <FormSelect id="addresses" name="addresses">
+            <FormInput type="text" placeholder="Postcode" onChange={getAddresses} />
+            <FormSelect id="addresses" name="addresses" onChange={props.onChange}>
                 {addresses.length === 0 ? <option value="">Addresses not found</option> : addresses.map((address) => {
                     return <option key={address["SiteId"]} value={address["AccountSiteUprn"]}>{address["SiteShortAddress"]}</option>
                 })}
