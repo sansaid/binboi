@@ -1,6 +1,6 @@
-# fly.toml file generated for binboi-server on 2022-09-25T19:48:44Z
+# fly.toml file generated for binboi-api on 2022-11-08T21:32:42Z
 
-app = "binboi-server"
+app = "binboi-api"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []

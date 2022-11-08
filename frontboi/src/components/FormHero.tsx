@@ -97,7 +97,7 @@ function AddressSelector(props: { onKeyDown: (e: React.KeyboardEvent) => void })
     async function getAddresses(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.value.length > 3) {
             let encodedPostcode = encodeURIComponent(e.target.value)
-            let res = await fetch(`https://binboi-server.fly.dev/addresses/${encodedPostcode}`)
+            let res = await fetch(`https://binboi-api.fly.dev/addresses/${encodedPostcode}`)
 
             let addresses = await res.json()
     
