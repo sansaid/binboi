@@ -15,15 +15,16 @@ const FormDownloadPulse = keyframes`
 export const FormSubmit = styled.a`
     background: #1BDAD7;
     display: block;
+    width: calc(220px + 20vmin);
     text-align: center;
-    line-height: 70px;
+    line-height: 330%;
     border: none;
-    font-size: calc(14px + 2vmin);
+    font-size: 3vmin;
     color: #2E282A;
     border-radius: 6px;
-    margin: 4px;
+    margin: 0.5em;
     font-weight: 700;
-    height: calc(14px + 6vmin);
+    height: 10vmin;
     flex-grow: 1;
     cursor: pointer;
     text-decoration: none;
@@ -38,11 +39,11 @@ export const FormSelect = styled.select`
     border: none;
     padding: 10px;
     width: calc(220px + 20vmin);
-    height: 8vmin;
-    font-size: calc(14px + 2vmin);
+    height: 10vmin;
+    font-size: 3vmin;
     color: white;
     border-radius: 6px;
-    margin: 20px 4px;
+    margin: 0.5em;
 `
 
 export const FormInput = styled.input`
@@ -50,16 +51,16 @@ export const FormInput = styled.input`
     border: none;
     padding: 10px;
     width: calc(200px + 20vmin);
-    height: 7vmin;
-    font-size: calc(14px + 2vmin);
+    height: 10vmin;
+    font-size: 3vmin;
     color: white;
     border-radius: 6px;
-    margin: 4px;
+    margin: 0.5em;
 `
 
 export const InputContainer = styled.div`
     display: flex;
-    height: calc(14px + 25vmin);
+    height: 25vmin;
     align-content: flex-start;
 `
 
