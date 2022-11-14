@@ -2,7 +2,7 @@
 
 `backboi` is just a silly name for the backend of Binboi. This is where the server logic resides.
 
-This is still a work in progress. See [TODOs](#todo) for a list of things left to implement.
+The purpose of backboi for now is simply to serve as a proxy for the [Reading Council API](https://api.reading.gov.uk/) (which is protected by CORS).
 
 ## Contributing
 
@@ -21,8 +21,4 @@ All running commands and instructions can be found in the [Makefile](./Makefile)
 ## TODO
 _! = no dependencies, otherwise the order of the list determines when things should be executed from first to last_
 
-- [ ] Implement collections API
-- [x] !Decide on where to deploy backboi
-- [x] !Write deployment pipeline boilerplate for backboi
-- [x] !Automate testing with a pipeline (e.g. Github Workflow)
 - [ ] !Think about how we can use Postman to automate testing the Echo handlers (by mocking the Reading API with it) - if we can't use Postman, we should think of another way
