@@ -4,7 +4,8 @@ export const FormButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: space-between;
+    place-content: center;
+    place-items: center;
 `
 
 export const FormNavigatorSecondary = styled.button`

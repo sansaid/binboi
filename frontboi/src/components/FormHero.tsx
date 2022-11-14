@@ -13,7 +13,7 @@ export function FormHero(): React.ReactElement {
     const [downloadUrl, setDownloadUrl] = useState('')
     const [loading, setLoading] = useState(false);
 
-    function generateicsFilename(): string {
+    function generateIcsFilename(): string {
         return `${uprn}-${new Date(Date.now()).toISOString()}.ics`
     }
 
@@ -69,11 +69,11 @@ export function FormHero(): React.ReactElement {
                         { loading ? <ClipLoader
                             color={"#2E282A"}
                             loading={loading}
-                            size={20}
+                            size={'2vmin'}
                             aria-label="Loading Spinner"
                             data-testid="loader"
                         /> : "Submit" }
-                    </FormSubmit> : <FormDownload href={downloadUrl} download={generateicsFilename()}>Download Reminders</FormDownload>}
+                    </FormSubmit> : <FormDownload href={downloadUrl} download={generateIcsFilename()}>Download Reminders</FormDownload>}
                 </FormButtonContainer>
             </Form>
         </FormContainer>
