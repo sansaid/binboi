@@ -7,11 +7,20 @@ export const AddressSelectorContainer = styled.div`
     flex-direction: column;
 `
 
-export function AddressSelector(props: { onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void }): React.ReactElement {
+export function AddressSelector(props: { onChange: (e: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => void, setUprn: React.Dispatch<React.SetStateAction<string>> }): React.ReactElement {
     let [addresses, setAddresses] = useState([])
+
+    function updateUprn(e: React.ChangeEvent<HTMLSelectElement>) {
+        props.onChange(e);
+
+        // TODO: there's got to be a better way of doing this
+        props.setUprn(e.target.value as string);
+    }
 
     async function getAddresses(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.value.length > 3) {
+            props.onChange(e)
+
             let encodedPostcode = encodeURIComponent(e.target.value)
             let res = await fetch(`https://binboi-api.fly.dev/addresses/${encodedPostcode}`)
 
@@ -28,7 +37,7 @@ export function AddressSelector(props: { onChange: (e: React.ChangeEvent<HTMLSel
     return <>
         <AddressSelectorContainer>
             <FormInput type="text" placeholder="Postcode" onChange={getAddresses} />
-            <FormSelect id="addresses" name="addresses" onChange={props.onChange}>
+            <FormSelect id="addresses" name="addresses" onChange={updateUprn}>
                 {addresses.length === 0 ? <option value="">Addresses not found</option> : addresses.map((address) => {
                     return <option key={address["SiteId"]} value={address["AccountSiteUprn"]}>{address["SiteShortAddress"]}</option>
                 })}

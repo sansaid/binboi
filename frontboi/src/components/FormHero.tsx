@@ -61,7 +61,7 @@ export function FormHero(): React.ReactElement {
         <FormContainer>
             <Form onSubmit={submitHandler}>
                 <InputContainer>
-                    <AddressSelector onChange={(e) => setUprn(e.target.value as string)}/>
+                    <AddressSelector onChange={(e) => { setDownloadUrl('') } } setUprn={setUprn} />
                 </InputContainer>
                 <FormButtonContainer>
                     { downloadUrl === '' ? 
