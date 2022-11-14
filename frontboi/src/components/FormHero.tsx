@@ -28,12 +28,9 @@ export function FormHero(): React.ReactElement {
 
         let yearFromNow: string = yearFromNowDate.toISOString().split('T')[0]
 
-        console.log(uprn)
-
         if (uprn !== '') {
             let res = await fetch(`https://binboi-api.fly.dev/collections/${uprn}?to_date=${yearFromNow}`)
             let deserialisedRes = await res.json()
-            console.log(deserialisedRes)
 
             if ("collections" in deserialisedRes) {
                 if (Array.isArray(deserialisedRes.collections)) {
