@@ -1,4 +1,16 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+
+const FormDownloadPulse = keyframes`
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(27, 218, 215, 0.7);
+  }
+  
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(27, 218, 215, 0);
+  }
+`
 
 export const FormSubmit = styled.a`
     background: #1BDAD7;
@@ -14,6 +26,11 @@ export const FormSubmit = styled.a`
     height: calc(14px + 6vmin);
     flex-grow: 1;
     cursor: pointer;
+    text-decoration: none;
+`
+
+export const FormDownload = styled(FormSubmit)`
+    animation: ${FormDownloadPulse} 2s 1;
 `
 
 export const FormSelect = styled.select`
