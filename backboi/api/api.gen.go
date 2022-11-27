@@ -18,22 +18,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// Address Bin collection point address - as referenced in https://api.reading.gov.uk/v0.json#/components/schemas/Address'
-type Address struct {
-	AccountSiteId     *string `json:"AccountSiteId,omitempty"`
-	AccountSiteUprn   *string `json:"AccountSiteUprn,omitempty"`
-	SiteAddress2      *string `json:"SiteAddress2,omitempty"`
-	SiteAddressPrefix *string `json:"SiteAddressPrefix,omitempty"`
-	SiteEasting       *string `json:"SiteEasting,omitempty"`
-	SiteId            *string `json:"SiteId,omitempty"`
-	SiteLatitude      *string `json:"SiteLatitude,omitempty"`
-	SiteLongitude     *string `json:"SiteLongitude,omitempty"`
-	SiteNorthing      *string `json:"SiteNorthing,omitempty"`
-	SiteShortAddress  *string `json:"SiteShortAddress,omitempty"`
-}
-
-// Addresses List of addresses - as referenced in https://api.reading.gov.uk/v0.json#/components/schemas/Addresses'
-type Addresses = []Address
+// Addresses Object containing list of addresses - as referenced in https://api.reading.gov.uk/v0.json#/components/schemas/Addresses'
+type Addresses = map[string]interface{}
 
 // Collection defines model for Collection.
 type Collection struct {
@@ -227,25 +213,22 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
+	"TYGfLg8AAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

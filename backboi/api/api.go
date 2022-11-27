@@ -60,8 +60,10 @@ func get(endpoint string, marshalObject any) error {
 	body, err := ioutil.ReadAll(reader)
 
 	if err != nil {
-		return fmt.Errorf("[binboi] Error parsing response from %s: %s", endpoint, err.Error())
+		return fmt.Errorf("[binboi] Error reading body from %s: %s", endpoint, err.Error())
 	}
+
+	fmt.Printf("%s", string(body))
 
 	err = json.Unmarshal(body, &marshalObject)
 

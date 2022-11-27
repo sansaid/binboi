@@ -194,7 +194,10 @@ components:
           type: string
           example: 'ALDER HOUSE, FLAT 1, ST GILES CLOSE, RG1 2AR'
     Addresses:
-      type: array
-      description: List of addresses - as referenced in https://api.reading.gov.uk/v0.json#/components/schemas/Addresses'
-      items:
-        $ref: '#/components/schemas/Address'
+      type: object
+      description: Object containing list of addresses - as referenced in https://api.reading.gov.uk/v0.json#/components/schemas/Addresses'
+      Addresses:
+          type: array
+          description: List of addresses for associated postcode
+          items:
+            $ref: '#/components/schemas/Address'
