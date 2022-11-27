@@ -1,6 +1,4 @@
-import { ReturnObject } from 'ics'
 import React, { useState } from 'react'
-import { collectionsToIcs, Collection } from '../helpers/convert_to_ics'
 import { AddressSelector } from './AddressSelector'
 import { Form, FormSubmit, FormDownload, FormContainer, InputContainer } from './Form'
 import { FormButtonContainer } from './FormNavigators'
@@ -12,10 +10,6 @@ export function FormHero(): React.ReactElement {
     const [uprn, setUprn] = useState('')
     const [downloadUrl, setDownloadUrl] = useState('')
     const [loading, setLoading] = useState(false);
-
-    function generateIcsFilename(): string {
-        return `${uprn}-${new Date(Date.now()).toISOString()}.ics`
-    }
 
     async function submitHandler(e: React.FormEvent) {
         e.preventDefault();
@@ -29,32 +23,10 @@ export function FormHero(): React.ReactElement {
         let yearFromNow: string = yearFromNowDate.toISOString().split('T')[0]
 
         if (uprn !== '') {
-            let res = await fetch(`https://binboi-api.fly.dev/collections/${uprn}?to_date=${yearFromNow}`)
-            let deserialisedRes = await res.json()
-
-            if ("collections" in deserialisedRes) {
-                if (Array.isArray(deserialisedRes.collections)) {
-                    createDownloadUrl(deserialisedRes.collections)
-                }
-            }
+            setDownloadUrl(`https://binboi-api.fly.dev/calendar/${uprn}?to_date=${yearFromNow}`)
         }
 
         setLoading(false)
-    }
-
-    function createDownloadUrl(collections: Array<Collection>) {
-        if (collections.length > 0) {
-            const icsRes: ReturnObject = collectionsToIcs(collections)
-
-            if (icsRes.error) {
-                console.log(`Error producing ics: ${icsRes.error}`)
-                return
-            }
-
-            const icsBlob: Blob = new Blob([icsRes.value!])
-
-            setDownloadUrl(URL.createObjectURL(icsBlob))
-        }
     }
 
     return <>
@@ -65,15 +37,17 @@ export function FormHero(): React.ReactElement {
                 </InputContainer>
                 <FormButtonContainer>
                     { downloadUrl === '' ? 
-                    <FormSubmit onClick={submitHandler}>
-                        { loading ? <ClipLoader
-                            color={"#2E282A"}
-                            loading={loading}
-                            size={'2vmin'}
-                            aria-label="Loading Spinner"
-                            data-testid="loader"
-                        /> : "Submit" }
-                    </FormSubmit> : <FormDownload href={downloadUrl} download={generateIcsFilename()}>Download Reminders</FormDownload>}
+                        <FormSubmit onClick={submitHandler}>
+                            { loading ? <ClipLoader
+                                color={"#2E282A"}
+                                loading={loading}
+                                size={'2vmin'}
+                                aria-label="Loading Spinner"
+                                data-testid="loader"
+                            /> : "Submit" }
+                        </FormSubmit> :
+                        <FormDownload href={downloadUrl}>Download Reminders</FormDownload>
+                    }
                 </FormButtonContainer>
             </Form>
         </FormContainer>
