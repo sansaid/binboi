@@ -79,6 +79,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
+  /calendar/{uprn}:
+    get:
+      description: Get .ics calendar feed for UPRN
+      operationId: get-calendar-feed
+      parameters:
+        - name: uprn
+          in: path
+          description: The UPRN code of the address whose calendar feed we're trying to create
+          required: true
+          schema:
+            type: string
+        - name: from_date
+          in: query
+          description: Start date of when calendar feed will be generated from (in YYYY-MM-DD format)
+          schema:
+            type: string
+        - name: to_date
+          in: query
+          description: End date of when calendar feed will be generated from (in YYYY-MM-DD format)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Calendar feed for UPRN
+          content:
+            text/calendar:
+              schema:
+                type: string
+        default:
+          description: Default error message to return to clients
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
         
 # Using RFC3986 for external referencing of schemas: https://swagger.io/docs/specification/using-ref/
 components:
