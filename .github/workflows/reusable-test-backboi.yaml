@@ -3,7 +3,7 @@ name: reusable-test-backboi
 on:
   pull_request:
     branches:
-    - master
+    - main
     - 'release/**'
     - 'cicd/**'
     - dev

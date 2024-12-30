@@ -6,7 +6,7 @@ on:
       - frontboi/**
       - .github/**
     branches:
-    - master
+    - main
 
 jobs:
   test-frontboi:

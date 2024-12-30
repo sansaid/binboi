@@ -6,7 +6,7 @@ on:
       - backboi/**
       - .github/**
     branches:
-    - master
+    - main
 
 jobs:
   test-backboi:
